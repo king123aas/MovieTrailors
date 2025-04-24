@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MovieTrailers</title>
+  <link rel="icon" href="ChatGPT Image Apr 24, 2025, 07_57_32 PM.png" type="image/png">
+
+  <style>
+    .close-details {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  z-index: 999;
+}
+
+    
+    .g-recaptcha {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+    .captcha-placeholder {
+  margin: 10px 0;
+  padding: 10px;
+  background: #333;
+  color: #aaa;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.google-btn {
+  background: white;
+  color: #333;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.google-btn:hover {
+  background: #000000;
+  color: white;
+}
+
+    .modal-content h4 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+.modal-content select {
+  padding: 5px;
+  background: #111;
+  color: white;
+  border: 1px solid #444;
+}
+
+    .profile-container {
+  position: relative;
+}
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: #222;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 999;
+  
+}
+.profile-dropdown a {
+  display: block;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+  border-bottom: 1px solid #333;
+}
+.profile-dropdown a:hover {
+  background: #444;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo img {
+  height: 40px;
+  margin-bottom: 5px;
+}
+
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial,
+       sans-serif;
+       background-color:
+       #141414; color:
+       #fff; transition:
+       background-color 0.3s,
+       color 0.3s; 
+       scroll-behavior: smooth;
+      }
+       
+    header { 
+  background-color: #000; 
+  padding: 1px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Semi-transparent border */
+  transition: top 0.3s;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.search-container {
+  position: relative;
+}
+.search-container input {
+  padding: 5px 25px 5px 5px;
+}
+.close-search {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+    .logo { font-size: 28px; font-weight: bold; color: red; }
+    nav a { margin: 0 15px; color: white; text-decoration: none; cursor: pointer; }
+    .search-container input { padding: 5px; }
+    .profile-placeholder { width: 30px; height: 30px; background: gray; border-radius: 50%; }
+    .main { padding: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+    .card { background: #222; width: 180px; border-radius: 5px; overflow: hidden; cursor: pointer; transition: 0.3s; }
+    .card img { width: 100%; height: 270px; object-fit: cover; }
+    .card:hover { transform: scale(1.05); }
+    .my-list-section { padding: 20px; display: none; }
+    .footer { background-color: #000; padding: 40px; text-align: center; font-size: 14px; color: #aaa; line-height: 1.6; }
+    .footer br { margin-bottom: 10px; display: block; }
+    .buttons { margin-top: 10px; }
+    .buttons button { margin-right: 10px; padding: 5px 10px; cursor: pointer; border: none; border-radius: 4px; }
+    .favorite-btn.active { background-color: red; color: white; }
+    .search-suggestions { background: #333; position: absolute; color: #fff; width: 200px; max-height: 150px; overflow-y: auto; display: none; }
+    .search-suggestions div { padding: 5px; cursor: pointer; }
+    .search-suggestions div:hover { background: #555; }
+    .toggle-mode { cursor: pointer; background: #333; color: white; border: none; padding: 5px 10px; margin-left: 10px; border-radius: 5px; }
+
+    .light-mode { background-color: #f0f0f0; color: #000; }
+    .light-mode header, .light-mode .footer { background-color: #ddd; color: #000; }
+    .light-mode .card { background: #fff; color: #000; }
+    .light-mode .search-suggestions { background: #eee; color: #000; }
+    .light-mode .search-suggestions div:hover { background: #ccc; }
+
+    body.light-theme {
+  background-color: #fff;
+  color: #111;
+}
+body.light-theme header {
+  background-color: #eee;
+  color: #000;
+}
+body.light-theme .modal-content {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+
+ body {
+  font-family: Arial, sans-serif;
+  background-color: #141414;
+  color: #fff;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light mode overrides */
+.light-mode {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+.light-mode header,
+.light-mode .footer {
+  background-color: #ddd;
+  color: #000;
+}
+
+.light-mode .card {
+  background: #fff;
+  color: #000;
+}
+
+.light-mode .card-title {
+  color: #000;
+}
+
+.light-mode .details,
+.light-mode .my-list-section {
+  color: #000;
+}
+
+.light-mode nav a {
+  color: #000;
+}
+
+.light-mode .toggle-mode {
+  background: #bbb;
+  color: #000;
+}
+
+.light-mode .search-suggestions {
+  background: #eee;
+  color: #000;
+}
+
+.light-mode .search-suggestions div:hover {
+  background: #ccc;
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* transparent dark overlay */
+  backdrop-filter: blur(10px); /* blurs background */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  color: white;
+  position: relative;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content input {
+  width: 90%;
+  padding: 8px;
+  margin: 10px 0;
+  background: #111;
+  border: 1px solid #444;
+  color: white;
+}
+.modal-content button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background: red;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+.close-modal {
+  position: absolute;
+  top: 10px; right: 20px;
+  font-size: 20px;
+  cursor: pointer;
+  
+}
+
+
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      
+    }
+    .modal-content {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      color: #fff;
+      position: relative;
+      
+    }
+    .modal-content img {
+      width: 100px;
+      margin-bottom: 10px;
+    }
+    .modal .close {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #fff;
+      
+    }
+    .light-mode .modal-content {
+      background: #fff;
+      color: #000;
+      
+    }
+    .light-mode .modal .close {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="MovieTrailers Logo" style="height: 87.1px;">
+      <div style="font-size: 14px; color: #aaa;">MovieTrailers</div>
+      
+    </div>
+    
+    <nav>
+      <a onclick="filterBy('all')" data-i18n="home">Home</a>
+      <a onclick="filterBy('tv')" data-i18n="tvShows">TV Shows</a>
+      <a onclick="filterBy('movie')" data-i18n="movies">Movies</a>
+      <a onclick="filterBy('popular')" data-i18n="newPopular">New & Popular</a>
+      <a onclick="showMyList()" data-i18n="myList">My List</a>
+    </nav>
+    
+    <div class="search-container">
+      <input type="text" id="search" oninput="searchMovie()" placeholder="Search...">
+      <div id="suggestions" class="search-suggestions"></div>
+    </div>
+    <button class="toggle-mode" onclick="toggleMode()">Toggle Light/Dark</button>
+
+    <div class="profile-container">
+      <div class="profile-placeholder" onclick="toggleDropdown()"></div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="#" onclick="openSettingsModal()">Settings</a>
+        <a href="#" onclick="openModal('login')">Log In</a>
+        <a href="#" onclick="openModal('signup')">Sign Up</a>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="main" id="main"></div>
+
+  <div class="modal" id="detailsModal">
+    <div class="modal-content" id="details">
+      <span class="close-details" onclick="closeDetails()">×</span>
+
+    </div>
+  </div>
+
+  <div class="my-list-section" id="myListSection">
+    <h2>My List</h2>
+    <div class="main" id="myListContainer"></div>
+  </div>
+ <p style="text-align: center; font-size: 20px;">New Movies & Series are coming!</p>
+  <footer class="footer">
+   
+    Audio Description <br>
+    Investor Relations <br>
+    Legal Notices <br>
+    Help Center <br>
+    Jobs <br>
+    Cookie Preferences <br>
+    Gift Cards <br>
+    Terms of Use <br>
+    Corporate Information <br>
+    Media Center <br>
+    Privacy <br>
+    Contact Us
+  </footer>
+
+  <script>
+    const movies = [
+    {
+        id: 1,
+        title: "Inception",
+        type: "movie",
+        genre: "Action, Sci-Fi",
+        description: "A thief who steals corporate secrets through dream-sharing technology is given an inverse task.",
+        poster: "https://m.media-amazon.com/images/I/71uKM%2BLdgFL.__AC_SX300_SY300_QL70_FMwebp_.jpg",
+        logo: "https://upload.wikimedia.org/wikipedia/en/2/2e/Inception_%282010%29_theatrical_poster.jpg",
+        trailer: "https://www.youtube.com/watch?v=YoHD9XEInc0",
+        popular: true
+      },
+      {
+        id: 2,
+        title: "The Matrix",
+        type: "movie",
+        genre: "Action, Sci-Fi",
+        description: "A computer hacker learns about the true nature of reality and his role in the war against its controllers.",
+        poster: "https://m.media-amazon.com/images/I/51EG732BV3L.jpg",
+        logo: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg",
+        trailer: "https://www.youtube.com/watch?v=vKQi3bBA1y8",
+        popular: true
+      },
+      {
+        id: 3,
+        title: "Game of Thrones",
+        type: "tv",
+        genre: "Action, Adventure, Drama",
+        description: "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns.",
+        poster: "https://m.media-amazon.com/images/I/51A7EGmxK-L.jpg",
+        logo: "https://upload.wikimedia.org/wikipedia/en/d/d8/Game_of_Thrones_title_card.jpg",
+        trailer: "https://www.youtube.com/watch?v=gcTkNV5Vg1E",
+        popular: true
+      },
+      { id: 4, title: "Wednesday", genre: "Comedy", type: "tv", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg", description: "Follows Wednesday Addams’ years as a student as she attempts to master her psychic ability.", trailer: "https://youtu.be/f6wgSkW7giQ?si=4rLmNey-8tY6LK1Z" },
+
+      { id: 5, title: "The Wandering Earth", genre: "Sci-Fi", type: "movie", popular: true, 
+      poster: "https://m.media-amazon.com/images/I/61cKVNRKUIL._AC_SX679_.jpg", 
+      logo: "https://m.media-amazon.com/images/I/61cKVNRKUIL._AC_SX679_.jpg", description: "A story about humanity's effort to move Earth to a new star system.", trailer: "https://youtu.be/0TDII5IkI3Y?si=3eyUedOMRahyl2OO" },
+      {
+        id: 6,
+        title: "The Batman",
+        genre: "Action, Crime",
+        description: "Batman ventures into Gotham City's underworld.",
+        poster: "https://image.tmdb.org/t/p/w300/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+        logo: "https://image.tmdb.org/t/p/w300/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+        trailer: "https://www.youtube.com/watch?v=mqqft2x_Aa4",
+        type: "movie",
+        popular: true
+      },
+      {
+        id: 7,
+        title: "The Mandalorian",
+        genre: "Sci-Fi, Adventure",
+        description: "A lone bounty hunter in the outer reaches of the galaxy.",
+        poster: "https://image.tmdb.org/t/p/w300/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
+        logo: "https://image.tmdb.org/t/p/w300/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
+        trailer: "https://www.youtube.com/watch?v=aOC8E8z_ifw",
+        type: "tv",
+        popular: true
+      },
+      {
+        id: 8,
+        title: "Stranger Things",
+        genre: "Horror, Sci-Fi",
+        description: "A group of kids uncover supernatural events.",
+        poster: "https://image.tmdb.org/t/p/w300/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/3/38/Stranger_Things_logo.png",
+        trailer: "https://www.youtube.com/watch?v=b9EkMc79ZSU",
+        type: "tv",
+        popular: true
+      },
+      {
+        id: 9,
+        title: "Top Gun: Maverick",
+        genre: "Action, Drama",
+        description: "After more than 30 years, Maverick is still pushing the envelope.",
+        poster: "https://image.tmdb.org/t/p/w300/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
+        logo: "https://image.tmdb.org/t/p/w300/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
+        trailer: "https://www.youtube.com/watch?v=giXco2jaZ_4",
+        type: "movie",
+        popular: true
+      },
+      { id: 10, title: "Arcane", genre: "Fantasy", type: "tv", popular: true, 
+      poster: "https://m.media-amazon.com/images/I/71maqFlWdbL._AC_SL1200_.jpg", 
+      logo: "https://m.media-amazon.com/images/I/71maqFlWdbL._AC_SL1200_.jpg", description: "Set in the League of Legends universe, Arcane dives into the origins of iconic characters.", trailer: "https://www.youtube.com/watch?v=fXmAurh012s" },
+      { id: 11, title: "Foundation", genre: "Sci-Fi", type: "tv", popular: false, 
+      poster: "https://image.tmdb.org/t/p/w500/8FhKnPpql374qyyHAkZDld93IUw.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/8FhKnPpql374qyyHAkZDld93IUw.jpg", description: "A complex saga of humans scattered on planets throughout the galaxy.", trailer: "https://www.youtube.com/watch?v=X4QYV5GTz7c" },
+      { id: 12, title: "Dune", genre: "Adventure", type: "movie", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", description: "A noble family becomes embroiled in a war for control over the galaxy’s most valuable asset.", trailer: "https://www.youtube.com/watch?v=n9xhJrPXop4" },
+      { id: 14, title: "Avatar: The Way of Water", genre: "Fantasy", type: "movie", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg", description: "Jake Sully and Ney'tiri have formed a family and are doing everything to stay together.", trailer: "https://www.youtube.com/watch?v=d9MyW72ELq0" },
+      { id: 15, title: "The Witcher", genre: "Fantasy", type: "tv", popular: true, 
+      poster: "https://m.media-amazon.com/images/I/81zGSdA29fL._AC_SL1500_.jpg", 
+      logo: "https://m.media-amazon.com/images/I/81zGSdA29fL._AC_SL1500_.jpg", description: "A mutated monster-hunter struggles to find his place in a world where people often prove more wicked than beasts.", trailer: "https://www.youtube.com/watch?v=ndl1W4ltcmg" },
+      { id: 16, title: "The Boys", genre: "Action", type: "tv", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/mY7SeH4HFFxW1hiI6cWuwCRKptN.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/mY7SeH4HFFxW1hiI6cWuwCRKptN.jpg", description: "A group of vigilantes sets out to take down corrupt superheroes.", trailer: "https://youtu.be/K-8VYKUZYiw?si=Al__uK110xvPynEz" },
+      { id: 17, title: "Interstellar", genre: "Sci-Fi", type: "movie", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg", description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", trailer: "https://www.youtube.com/watch?v=zSWdZVtXT7E" },
+      { id: 18, title: "Loki", genre: "Fantasy", type: "tv", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/kEl2t3OhXc3Zb9FBh1AuYzRTgZp.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/kEl2t3OhXc3Zb9FBh1AuYzRTgZp.jpg", description: "Loki resumes his role as the God of Mischief in a new timeline.", trailer: "https://www.youtube.com/watch?v=nW948Va-l10" },
+      { id: 19, title: "John Wick: Chapter 4", genre: "Action", type: "movie", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", description: "With the price on his head ever increasing, legendary hitman John Wick takes his fight against the High Table global.", trailer: "https://www.youtube.com/watch?v=qEVUtrk8_B4" },
+      { id: 20, title: "Peaky Blinders", genre: "Crime", type: "tv", popular: false, 
+      poster: "https://image.tmdb.org/t/p/w500/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg", description: "A gangster family epic set in 1900s England.", trailer: "https://www.youtube.com/watch?v=oVzVdvGIC7U" },
+      { id: 21, title: "Oppenheimer", genre: "Drama", type: "movie", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/ptpr0kGAckfQkJeJIt8st5dglvd.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/ptpr0kGAckfQkJeJIt8st5dglvd.jpg", description: "A dramatization of the life of J. Robert Oppenheimer and the creation of the atomic bomb.", trailer: "https://www.youtube.com/watch?v=uYPbbksJxIg" },
+      { id: 22, title: "Squid Game", genre: "Thriller", type: "tv", popular: true, 
+      poster: "https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg", 
+      logo: "https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg", description: "Hundreds of cash-strapped contestants accept an invitation to compete in children's games for a tempting prize.", trailer: "https://www.youtube.com/watch?v=oqxAJKy0ii4" },
+      { id: 23, title: "Black Mirror", genre: "Sci-Fi", type: "tv", popular: false, 
+      poster: "https://m.media-amazon.com/images/I/71fNIAwmsUL._AC_SL1500_.jpg", 
+      logo: "https://m.media-amazon.com/images/I/71fNIAwmsUL._AC_SL1500_.jpg", description: "An anthology series exploring a twisted, high-tech world where humanity's greatest innovations and darkest instincts collide.", trailer: "https://www.youtube.com/watch?v=jROLrhQkK78" },
+      {
+    id: 26,
+    title: "Dune: Part Two",
+    genre: "Sci-Fi, Adventure",
+    type: "movie",
+    poster: "https://m.media-amazon.com/images/I/81ZMkn8HGBL._AC_SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/81ZMkn8HGBL._AC_SL1500_.jpg",
+    description: "Paul Atreides joins the Fremen to avenge his family and bring balance to Arrakis.",
+    trailer: "https://www.youtube.com/watch?v=Way9Dexny3w"
+  },
+  {
+    id: 27,
+    title: "The Last of Us",
+    genre: "Drama, Thriller",
+    type: "tv",
+    poster: "https://m.media-amazon.com/images/I/71LT-DXRwTL._AC_SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/71LT-DXRwTL._AC_SL1500_.jpg",
+    description: "Survivors navigate a world devastated by a fungal outbreak.",
+    trailer: "https://www.youtube.com/watch?v=uLtkt8BonwM"
+  },
+  {
+    id: 28,
+    title: "Everything Everywhere All at Once",
+    genre: "Action, Sci-Fi",
+    type: "movie",
+    poster: "https://m.media-amazon.com/images/I/81KBgzg1vhL._SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/81KBgzg1vhL._SL1500_.jpg",
+    description: "A woman gains multiversal powers to fight bizarre threats across realities.",
+    trailer: "https://www.youtube.com/watch?v=wxN1T1uxQ2g"
+  },
+  {
+    id: 29,
+    title: "The Bear",
+    genre: "Drama, Culinary",
+    type: "tv",
+    poster: "https://m.media-amazon.com/images/I/81mXsvw5T9L.__AC_SX300_SY300_QL70_FMwebp_.jpg",
+    logo: "https://m.media-amazon.com/images/I/81mXsvw5T9L.__AC_SX300_SY300_QL70_FMwebp_.jpg",
+    description: "A young chef returns home to run his late brother’s restaurant in Chicago.",
+    trailer: "https://www.youtube.com/watch?v=i5U-w1yL4r0"
+  },
+  {
+    id: 31,
+    title: "Peacemaker",
+    genre: "Action, Comedy",
+    type: "tv",
+    poster: "https://m.media-amazon.com/images/I/714diLjC4XL._AC_SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/714diLjC4XL._AC_SL1500_.jpg",
+    description: "Peacemaker tries to save the world with his unique sense of justice.",
+    trailer: "https://youtu.be/hgR0skiaVSo?si=J_2C22yUPSi4OAoR"
+  },
+  {
+    id: 32,
+    title: "Barbie",
+    genre: "Fantasy, Comedy",
+    type: "movie",
+    poster: "https://m.media-amazon.com/images/I/71hsNVUr02L._AC_SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/71hsNVUr02L._AC_SL1500_.jpg",
+    description: "Barbie steps into the real world and learns the meaning of being human.",
+    trailer: "https://www.youtube.com/watch?v=pBk4NYhWNMM"
+  },
+  {
+    id: 33,
+    title: "Severance",
+    genre: "Sci-Fi, Thriller",
+    type: "tv",
+    poster: "https://m.media-amazon.com/images/I/61EqK1be0rL._AC_SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/61EqK1be0rL._AC_SL1500_.jpg",
+    description: "Employees at Lumon Industries live split lives between work and home.",
+    trailer: "https://www.youtube.com/watch?v=xEQP4VVuyrY"
+  },
+  {
+    id: 35,
+    title: "Shadow and Bone",
+    genre: "Fantasy, Adventure",
+    type: "tv",
+    poster: "https://i.ebayimg.com/images/g/6H8AAOSwm~ZiVCK3/s-l1600.webp",
+    logo: "https://i.ebayimg.com/images/g/6H8AAOSwm~ZiVCK3/s-l1600.webp",
+    description: "A young soldier unleashes a power that might save her war-torn world.",
+    trailer: "https://www.youtube.com/watch?v=b1WHQTbJ7vE"
+  },
+  {
+    id: 36,
+    title: "Wonka",
+    genre: "Fantasy, Musical",
+    type: "movie",
+    poster: "https://i.ebayimg.com/images/g/Zw0AAOSwMRZlcila/s-l1600.webp",
+    logo: "https://i.ebayimg.com/images/g/Zw0AAOSwMRZlcila/s-l1600.webp",
+    description: "The origin of Willy Wonka and the magical chocolate factory.",
+    trailer: "https://www.youtube.com/watch?v=otNh9bTjXWg"
+  },
+  {
+    id: 38,
+    title: "Poor Things",
+    genre: "Drama, Fantasy",
+    type: "movie",
+    poster: "https://i.ebayimg.com/images/g/1FkAAOSwONNk9cH-/s-l1600.webp",
+    logo: "https://i.ebayimg.com/images/g/1FkAAOSwONNk9cH-/s-l1600.webp",
+    description: "A woman brought back to life sets off on a journey of discovery.",
+    trailer: "https://www.youtube.com/watch?v=RlbR5N6veqw"
+  },
+  {
+    id: 39,
+    title: "House of the Dragon",
+    genre: "Fantasy, Drama",
+    type: "tv",
+    poster: "https://i.ebayimg.com/images/g/Rb8AAOSwcqpjBYzf/s-l1600.webp",
+    logo: "https://i.ebayimg.com/images/g/Rb8AAOSwcqpjBYzf/s-l1600.webp",
+    description: "Civil war breaks out in House Targaryen decades before Game of Thrones.",
+    trailer: "https://www.youtube.com/watch?v=DotnJ7tTA34"
+  },
+  {
+    id: 40,
+    title: "Glass Onion: A Knives Out Mystery",
+    genre: "Mystery, Comedy",
+    type: "movie",
+    poster: "https://m.media-amazon.com/images/I/91ohlTygXkL._AC_SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/91ohlTygXkL._AC_SL1500_.jpg",
+    description: "Detective Blanc uncovers secrets on a tech billionaire’s private island.",
+    trailer: "https://www.youtube.com/watch?v=gj5ibYSz8C0"
+  },
+  {
+    id: 43,
+    title: "Killers of the Flower Moon",
+    genre: "Crime, Drama",
+    type: "movie",
+    poster: "https://m.media-amazon.com/images/I/8170pcfuiaL._AC_SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/8170pcfuiaL._AC_SL1500_.jpg",
+    description: "The Osage murders unfold amid greed and a young FBI’s investigation.",
+    trailer: "https://www.youtube.com/watch?v=EP34Yoxs3FQ"
+  },
+  {
+    id: 44,
+    title: "The Night Agent",
+    genre: "Thriller, Action",
+    type: "tv",
+    poster: "https://m.media-amazon.com/images/I/71ezXTJLJlL._AC_SL1500_.jpg",
+    logo: "https://m.media-amazon.com/images/I/71ezXTJLJlL._AC_SL1500_.jpg",
+    description: "A low-level FBI agent answers a call that leads to a deadly conspiracy.",
+    trailer: "https://www.youtube.com/watch?v=YDbnY9Obsfs"
+  },
+  {
+    id: 45,
+    title: "The Creator",
+    genre: "Sci-Fi, Action",
+    type: "movie",
+    poster: "https://m.media-amazon.com/images/I/61DCEg5XJ1L._AC_SL1267_.jpg",
+    logo: "https://m.media-amazon.com/images/I/61DCEg5XJ1L._AC_SL1267_.jpg",
+    description: "In a future war, a soldier must destroy the AI that could end humanity.",
+    trailer: "https://www.youtube.com/watch?v=ex3C1-5Dhb8"
+  },
+  { id: 47, title: "Barry", genre: "Crime, Comedy", type: "tv", poster: "https://m.media-amazon.com/images/I/61-5u1GJ54L._AC_SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/61-5u1GJ54L._AC_SL1500_.jpg", description: "A hitman from the Midwest moves to Los Angeles and gets caught up in the local theater arts scene.", trailer: "https://youtu.be/i6qlPeS1kGY?si=2lTwQS8QC2AWILcu", popular: false },
+
+  { id: 48, title: "Fight Club", genre: "Drama", description: "An insomniac office worker and a soap salesman build a global organization to help vent male aggression.", poster: "https://m.media-amazon.com/images/I/81D+KJkO4SL._AC_SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/81D+KJkO4SL._AC_SL1500_.jpg ", trailer: "https://www.youtube.com/watch?v=qtRKdVHc-cE", type: "movie" },
+    { id: 49, title: "The Shawshank Redemption", genre: "Drama", description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.", poster: "https://m.media-amazon.com/images/I/71715eBi1sL._AC_SL1000_.jpg", logo: "https://m.media-amazon.com/images/I/71715eBi1sL._AC_SL1000_.jpg", trailer: "https://www.youtube.com/watch?v=6hB3S9bIaco", type: "movie" },
+    { id: 50, title: "The Godfather", genre: "Crime, Drama", description: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.", poster: "https://m.media-amazon.com/images/I/510L5ypQBdL._AC_SL1024_.jpg", logo: "https://m.media-amazon.com/images/I/510L5ypQBdL._AC_SL1024_.jpg", trailer: "https://www.youtube.com/watch?v=sY1S34973zA", type: "movie" },
+    { id: 51, title: "Pulp Fiction", genre: "Crime, Drama", description: "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.", poster: "https://m.media-amazon.com/images/I/718LfFW+tIL._AC_SL1280_.jpg", logo: "https://m.media-amazon.com/images/I/718LfFW+tIL._AC_SL1280_.jpg", trailer: "https://www.youtube.com/watch?v=s7EdQ4FqbhY", type: "movie" },
+
+
+    { id: 53, title: "The Lord of the Rings: The Fellowship of the Ring", genre: "Action, Adventure, Drama", description: "A young hobbit, Frodo Baggins, is recruited by a wizard to join a dangerous mission to destroy a powerful ring.", poster: "https://m.media-amazon.com/images/I/81EBp0vOZZL._AC_SL1329_.jpg", logo: "https://m.media-amazon.com/images/I/81EBp0vOZZL._AC_SL1329_.jpg", trailer: "https://www.youtube.com/watch?v=Pki6jbSbXIY", type: "movie" },
+    { id: 54, title: "The Silence of the Lambs", genre: "Crime, Drama, Thriller", description: "A young FBI cadet must confide in an incarcerated and manipulative killer to receive his help on catching another serial killer.", poster: "https://m.media-amazon.com/images/I/717XLNKDgAL._AC_SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/717XLNKDgAL._AC_SL1500_.jpg", trailer: "https://youtu.be/6iB21hsprAQ?si=zYFVfASQ4hIrgDP3", type: "movie" },
+    { id: 55, title: "The Prestige", genre: "Drama, Mystery, Sci-Fi", description: "Two magicians engage in a bitter rivalry, each trying to best the other with the ultimate magic trick.", poster: "https://i.ebayimg.com/images/g/e1EAAOSw159g2LTm/s-l1600.webp", logo: "https://i.ebayimg.com/images/g/e1EAAOSw159g2LTm/s-l1600.webp", trailer: "https://www.youtube.com/watch?v=o4gHCmTQDVI", type: "movie" },
+    { id: 56, title: "Se7en", genre: "Crime, Drama, Mystery", description: "Two detectives hunt a serial killer who uses the seven deadly sins as his modus operandi.", poster: "https://m.media-amazon.com/images/I/71ivyTtPwoL._AC_SL1039_.jpg", logo: "https://m.media-amazon.com/images/I/71ivyTtPwoL._AC_SL1039_.jpg", trailer: "https://www.youtube.com/watch?v=znmZoVkCjpI", type: "movie" },
+    { id: 57, title: "Gladiator", genre: "Action, Adventure, Drama", description: "A betrayed Roman general sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery.", poster: "https://m.media-amazon.com/images/I/71sj8Yt20qL._AC_SL1336_.jpg", logo: "https://m.media-amazon.com/images/I/71sj8Yt20qL._AC_SL1336_.jpg", trailer: "https://www.youtube.com/watch?v=owK1qxDselE", type: "movie" },
+    { id: 58, title: "The Wolf of Wall Street", genre: "Biography, Comedy, Crime", description: "A stockbroker involved in crime and corruption learns the true meaning of success and the consequences of living a life of excess.", poster: "https://m.media-amazon.com/images/I/811ysrUHxQS._AC_SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/811ysrUHxQS._AC_SL1500_.jpg", trailer: "https://www.youtube.com/watch?v=iszwuX1AK6A", type: "movie" },
+    
+    
+    { id: 59, title: "The Dark Knight Rises", genre: "Action, Adventure, Drama", description: "Eight years after the events of The Dark Knight, Bruce Wayne comes out of retirement to stop the masked terrorist Bane.", poster: "https://m.media-amazon.com/images/I/81hE7LkgPoL._AC_SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/81hE7LkgPoL._AC_SL1500_.jpg", trailer: "https://www.youtube.com/watch?v=g8evyE9TuYk", type: "movie" },
+    { id: 60, title: "Shutter Island", genre: "Mystery, Thriller", description: "A U.S. Marshal investigates the disappearance of a murderer who escaped from a hospital for the criminally insane.", poster: "https://m.media-amazon.com/images/I/71nShdGAJGS._SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/71nShdGAJGS._SL1500_.jpg", trailer: "https://www.youtube.com/watch?v=5iaYLCiq5RM", type: "movie" },
+    { id: 61, title: "Inglourious Basterds", genre: "Adventure, Drama, War", description: "A group of Jewish-American soldiers plans to assassinate Nazi leaders during World War II in Nazi-occupied France.", poster: "https://m.media-amazon.com/images/I/61PXdxTJGPL._AC_SL1022_.jpg", logo: "https://m.media-amazon.com/images/I/61PXdxTJGPL._AC_SL1022_.jpg", trailer: "https://youtu.be/KnrRy6kSFF0?si=YP0IT-x-fm8hpkG0", type: "movie" },
+    { id: 62, title: "Mad Max: Fury Road", genre: "Action, Adventure, Sci-Fi", description: "In a post-apocalyptic wasteland, Max teams up with a rebellious warrior to escape a tyrannical warlord and his army.", poster: "https://m.media-amazon.com/images/I/81NHzC3QEYL._AC_SL1333_.jpg", logo: "https://m.media-amazon.com/images/I/81NHzC3QEYL._AC_SL1333_.jpg", trailer: "https://www.youtube.com/watch?v=hEJnMQG9ev8", type: "movie" },
+    { id: 63, title: "The Revenant", genre: "Adventure, Drama, Thriller", description: "A frontiersman on a quest for survival after being left for dead by members of his own hunting team.", poster: "https://m.media-amazon.com/images/I/A1BjliXNDPL._AC_SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/A1BjliXNDPL._AC_SL1500_.jpg", trailer: "https://www.youtube.com/watch?v=LoebZZ8K5N0", type: "movie" },
+    { id: 64, title: "The Social Network", genre: "Biography, Drama", description: "The story of the founders of Facebook and how they navigated legal battles to create the social media giant.", poster: "https://m.media-amazon.com/images/I/518zV7F39qL._AC_.jpg", logo: "https://m.media-amazon.com/images/I/518zV7F39qL._AC_.jpg", trailer: "https://www.youtube.com/watch?v=lB95KLmpLR4", type: "movie" },
+    { id: 65, title: "Django Unchained", genre: "Drama, Western", description: "A freed slave sets out to rescue his wife from a brutal plantation owner.", poster: "https://m.media-amazon.com/images/I/912vL7muRwL._AC_SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/912vL7muRwL._AC_SL1500_.jpg", trailer: "https://youtu.be/_iH0UBYDI4g?si=_PaC-1FOpROABl2K", type: "movie" },
+    { id: 66, title: "The Big Lebowski", genre: "Comedy, Crime", description: "A laid-back Los Angeles slacker is mistaken for a millionaire with the same name, leading to a series of comedic events.", poster: "https://m.media-amazon.com/images/I/91PfUyEzvAL._AC_SL1500_.jpg", logo: "https://m.media-amazon.com/images/I/91PfUyEzvAL._AC_SL1500_.jpg", trailer: "https://www.youtube.com/watch?v=cd-go0oBF4Y", type: "movie" },
+    { id: 67, title: "Catch Me If You Can", genre: "Biography, Crime, Drama", description: "A young con artist evades the FBI for years by posing as a doctor, lawyer, and pilot.", poster: "https://m.media-amazon.com/images/I/61RpQyF7umL._AC_SL1000_.jpg", logo: "https://m.media-amazon.com/images/I/61RpQyF7umL._AC_SL1000_.jpg", trailer: "https://youtu.be/s-7pyIxz8Qg?si=AadfFcw-cbyhjq9v", type: "movie" },
+    
+    
+    // Add more movie/series entries here  as needed
+    ];
+
+    let favorites = [];
+
+    function displayMovies(arr) {
+      const main = document.getElementById('main');
+      main.innerHTML = '';
+      arr.forEach(movie => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => showDetails(movie.id);
+        card.innerHTML = `
+          <img src="${movie.poster}" alt="${movie.title}">
+          <div class="card-title">${movie.title}</div>
+        `;
+        main.appendChild(card);
+      });
+    }
+
+    function showDetails(id) {
+      const movie = movies.find(m => m.id === id);
+      const isFav = favorites.includes(id);
+      const details = document.getElementById('details');
+      const modal = document.getElementById('detailsModal');
+
+      details.innerHTML = `
+
+        <img src="${movie.logo}" alt="${movie.title} logo">
+        <h2>${movie.title}</h2>
+        <p><strong>Genre:</strong> ${movie.genre}</p>
+        <p>${movie.description}</p>
+        <div class="buttons">
+          <a href="${movie.trailer}" target="_blank"><button>Watch Trailer</button></a>
+          <button class="favorite-btn${isFav ? ' active' : ''}" onclick="event.stopPropagation(); toggleFavorite(${movie.id})">
+            ${isFav ? 'Remove from Favorites' : 'Add to Favorites'}
+          </button>
+        </div>
+      `;
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('detailsModal').style.display = 'none';
+    }
+
+    function toggleFavorite(id) {
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(f => f !== id);
+      } else {
+        favorites.push(id);
+      }
+      showDetails(id);
+    }
+
+    function showMyList() {
+      document.getElementById('detailsModal').style.display = 'none';
+      document.getElementById('myListSection').style.display = 'block';
+      const container = document.getElementById('myListContainer');
+      const favMovies = movies.filter(m => favorites.includes(m.id));
+      container.innerHTML = '';
+      favMovies.forEach(movie => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => showDetails(movie.id);
+        card.innerHTML = `
+          <img src="${movie.poster}" alt="${movie.title}">
+          <div class="card-title">${movie.title}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterBy(type) {
+      document.getElementById('detailsModal').style.display = 'none';
+      document.getElementById('myListSection').style.display = 'none';
+      if (type === 'all') displayMovies(movies);
+      else if (type === 'popular') displayMovies(movies.filter(m => m.popular));
+      else displayMovies(movies.filter(m => m.type === type));
+    }
+
+    function searchMovie() {
+      const val = document.getElementById('search').value.toLowerCase();
+      const suggestions = movies.filter(m =>
+        m.title.toLowerCase().includes(val) || m.genre.toLowerCase().includes(val)
+      );
+      const suggestionBox = document.getElementById('suggestions');
+      suggestionBox.innerHTML = '';
+      suggestions.forEach(s => {
+        const item = document.createElement('div');
+        item.textContent = s.title;
+        item.onclick = () => {
+          showDetails(s.id);
+          suggestionBox.style.display = 'none';
+        };
+        suggestionBox.appendChild(item);
+      });
+      suggestionBox.style.display = suggestions.length ? 'block' : 'none';
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('detailsModal');
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    window.onload = () => filterBy('all');
+  </script>
+  <script>
+    let lastScrollTop = 0;
+    const header = document.querySelector("header");
+  
+    window.addEventListener("scroll", () => {
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      if (scrollTop > lastScrollTop) {
+        // Scroll Down
+        header.style.top = "-80px";
+      } else {
+        // Scroll Up
+        header.style.top = "0";
+      }
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+  </script>
+  <!-- Modal -->
+<div class="modal" id="authModal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    
+    <div id="loginForm" style="display:none;">
+      <h2>Log In</h2>
+      <input type="email" placeholder="Email" required /><br/>
+      <input type="password" placeholder="Password" required /><br/>
+      <button onclick="simulateLogin()">Log In</button>
+      <div class="g-recaptcha" data-sitekey="6LesLSMrAAAAAEuVvRYEYnpOFlSpwlxmJ5KL0mya" style="display: flex; justify-content: center;"></div>
+      <hr>
+    </div>
+
+    <div id="signupForm" style="display:none;">
+      <h2>Sign Up</h2>
+      <input type="text" placeholder="Username" required /><br/>
+      <input type="email" placeholder="Email" required /><br/>
+      <input type="password" placeholder="Password" required /><br/>
+      <div class="g-recaptcha" data-sitekey="6LesLSMrAAAAAEuVvRYEYnpOFlSpwlxmJ5KL0mya" style="display: flex; justify-content: center;"></div>
+      <button>Sign Up</button>
+      <hr>
+      <div id="g_id_onload"
+     data-client_id="431998757700-c8nov0nh38ie6cqj7ubi4lcljg62m74p.apps.googleusercontent.com"
+     data-context="signin"
+     data-callback="handleGoogleSignIn"
+     data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="rectangular"
+     data-theme="outline"
+     data-text="signin_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal" id="settingsModal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeSettingsModal()">&times;</span>
+    <h2>Settings</h2>
+    
+    <h4>Account Info</h4>
+    <p>Email: user@example.com</p>
+    <p>Username: user123</p>
+
+    <h4>Change Password</h4>
+    <input type="password" placeholder="New Password">
+    <input type="password" placeholder="Confirm Password">
+    <button>Update Password</button>
+
+    <select id="language-select">
+      <option value="en">English</option>
+      <option value="ar">Arabic</option>
+      <option value="ku">Kurdî</option>
+    </select>
+    
+
+    <h4>Theme</h4>
+    <button onclick="toggleTheme()">Toggle Dark/Light</button>
+
+    <br><br>
+    <button onclick="signOut()">Sign Out</button>
+  </div>
+</div>
+
+<script>
+
+const translations = {
+  en: {
+    home: "Home",
+    tvShows: "TV Shows",
+    movies: "Movies",
+    newPopular: "New & Popular",
+    myList: "My List",
+    search: "Search",
+    watchTrailer: "Watch Trailer",
+    addToFavorites: "Add to Favorites",
+    removeFromFavorites: "Remove from Favorites",
+  },
+  ar: {
+    home: "ألرئسية",
+    tvShows: "ألمسلسلات",
+    movies: "ألأفلام",
+    newPopular: "أحدث الأفلام و المسلسلات",
+    myList: "قائمتي",
+    search: "البحث",
+    watchTrailer: "مشاهدة الدعاية",
+    addToFavorites: "إضافة إلى المفضلات",
+    removeFromFavorites: "إزاله من المفضلات",
+  },
+  ku: {
+    home: "ماڵەوە",
+    tvShows: "پیشاندەری تەلەڤیزیۆن",
+    movies: "فلیمەکان",
+    newPopular: "نوێ و بەناوبانگ",
+    myList: "لیستی من",
+    search: "گەڕان",
+    watchTrailer: "بینینی تریلەر",
+    addToFavorites: "زیادکردن بۆ دڵخوازەکان",
+    removeFromFavorites: "لابردن لە دڵخوازەکان",
+  }
+};
+
+document.getElementById('language-select').addEventListener('change', function () {
+  const selectedLang = this.value;
+  switchLanguage(selectedLang);
+});
+
+function switchLanguage(lang) {
+  const elements = document.querySelectorAll("[data-i18n]");
+  elements.forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    el.textContent = translations[lang][key];
+  });
+}
+
+
+
+
+  function toggleDropdown() {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function openModal(type) {
+    document.getElementById('authModal').style.display = 'flex';
+    document.getElementById('loginForm').style.display = type === 'login' ? 'block' : 'none';
+    document.getElementById('signupForm').style.display = type === 'signup' ? 'block' : 'none';
+    document.getElementById('profileDropdown').style.display = 'none';
+  }
+
+  function closeModal() {
+    document.getElementById('authModal').style.display = 'none';
+  }
+</script>
+<script>
+  function openSettingsModal() {
+    document.getElementById('settingsModal').style.display = 'flex';
+    document.getElementById('profileDropdown').style.display = 'none';
+  }
+  window.addEventListener('click', function(e) {
+  const modal = document.querySelector('.details-modal');
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+
+  function closeSettingsModal() {
+    document.getElementById('settingsModal').style.display = 'none';
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+  }
+
+  function signOut() {
+    alert('Signed out!');
+    closeSettingsModal();
+  }
+  function handleGoogleSignIn(response) {
+  const jwt = response.credential;
+  console.log("Google JWT:", jwt);
+  alert("Signed in with Google!");
+  closeModal();
+
+  // You can decode the JWT or send it to your server for real auth
+  }
+
+
+</script>
+
+
+</body>
+</html>
